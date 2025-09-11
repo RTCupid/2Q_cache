@@ -11,7 +11,7 @@ ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
 override CFLAGS += $(COMMONINC)
 
-CSRC = src/main.cpp src/2Q_cache.cpp src/perfect_cache.cpp
+CSRC = src/main.cpp src/cache2q.cpp src/perfect_cache.cpp
 
 # reproducing source tree in object tree
 COBJ := $(addprefix $(OUT_O_DIR)/,$(CSRC:.cpp=.o))
