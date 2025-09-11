@@ -15,9 +15,13 @@ int main () {
     size_t number_elems = 0;
     std::cin >> number_elems;
 
-    page_t first_page = {100};
+    page_id_t page_id = 0;
 
-    cache2q.cache2q_lookup_update (number_elems, the_slowest_function_to_get_int_element);
+    for (size_t i = 0; i < number_elems; i++) {
+        std::cin >> page_id;
+
+        cache2q.cache2q_lookup_update (page_id, the_slowest_function_to_get_int_element);
+    }
 
     return 0;
 }
