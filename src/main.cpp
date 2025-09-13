@@ -7,6 +7,7 @@
 page_t the_slowest_function_to_get_int_element (int key) { return key; }
 
 int main () {
+
     std::cout << GRN "### realization of 2Q cache\n" RESET;
     std::cout << GRN "# (c) RTCupid, 2024\n\n" RESET;
 
@@ -22,15 +23,19 @@ int main () {
 
     std::cout << BLU "Enter number of elements: " YEL;
     std::cin >> number_elems;
+    assert (std::cin.good());
 
     page_t page_id = 0;
     size_t hits    = 0;
 
     for (size_t i = 0; i < number_elems; i++) {
+
         std::cout << BLU "Enter " << i << " element: " YEL;
         std::cin  >> page_id;
+        assert (std::cin.good());
 
         if (cache2q.cache2q_lookup_update (page_id, the_slowest_function_to_get_int_element)) {
+
             std::cout << GRN "cache hit " YEL << page_id << std::endl;
             hits++;
         }
