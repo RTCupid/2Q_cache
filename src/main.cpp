@@ -39,6 +39,9 @@ int main () {
             std::cout << GRN "cache hit " YEL << page_id << std::endl;
             hits++;
         }
+
+        cache2q.dump_queues ();
+
     }
 
     std::cout << GRN "### number of hits = " YEL << hits << std::endl;
