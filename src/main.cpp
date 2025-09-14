@@ -1,15 +1,15 @@
 #include <iostream>
 #include <cassert>
 
-#include "../hdr/cache2q.hpp"
-#include "../common/colors.h"
+#include "cache2q.hpp"
+#include "colors.h"
 
-page_t the_slowest_function_to_get_int_element (int key) { return key; }
+int slow_func_to_get_int_element (int key) { return key; }
 
 int main () {
 
-    std::cout << GRN "### realization of 2Q cache\n" RESET;
-    std::cout << GRN "# (c) RTCupid, 2024\n\n" RESET;
+    std::cout << GRN "### implementation of 2Q cache\n" RESET;
+    std::cout << GRN "### (c) RTCupid, 2024\n\n" RESET;
 
     size_t cache_size = 0;
 
@@ -17,7 +17,7 @@ int main () {
     std::cin >> cache_size;
     assert (std::cin.good());
 
-    cache2q_t<page_t, int> cache2q(cache_size);
+    cache2q_t<int, int> cache2q(cache_size, slow_func_to_get_int_element);
 
     size_t number_elems = 0;
 
@@ -25,8 +25,8 @@ int main () {
     std::cin >> number_elems;
     assert (std::cin.good());
 
-    page_t page_id = 0;
-    size_t hits    = 0;
+    int page_id = 0;
+    size_t hits = 0;
 
     for (size_t i = 0; i < number_elems; i++) {
 
@@ -34,7 +34,7 @@ int main () {
         std::cin  >> page_id;
         assert (std::cin.good());
 
-        if (cache2q.cache2q_lookup_update (page_id, the_slowest_function_to_get_int_element)) {
+        if (cache2q.lookup_update (page_id)) {
 
             std::cout << GRN "cache hit " YEL << page_id << std::endl;
             hits++;

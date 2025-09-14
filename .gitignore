@@ -1,5 +1,2 @@
-*.o
-*.d
-*.out
-*.exe
+.vscode/*
 build/*
