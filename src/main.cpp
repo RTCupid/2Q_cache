@@ -8,12 +8,8 @@ int slow_func_to_get_int_element (int key) { return key; }
 
 int main () {
 
-    std::cout << GRN "### implementation of 2Q cache\n" RESET;
-    std::cout << GRN "### (c) RTCupid, 2024\n\n" RESET;
-
     size_t cache_size = 0;
 
-    std::cout << BLU "Enter cache size: " YEL;
     std::cin >> cache_size;
     assert (std::cin.good());
 
@@ -21,7 +17,6 @@ int main () {
 
     size_t number_elems = 0;
 
-    std::cout << BLU "Enter number of elements: " YEL;
     std::cin >> number_elems;
     assert (std::cin.good());
 
@@ -30,18 +25,11 @@ int main () {
 
     for (size_t i = 0; i < number_elems; i++) {
 
-        std::cout << BLU "Enter " << i << " element: " YEL;
         std::cin  >> page_id;
         assert (std::cin.good());
 
-        if (cache2q.lookup_update (page_id)) {
-
-            std::cout << GRN "cache hit " YEL << page_id << std::endl;
+        if (cache2q.lookup_update (page_id))
             hits++;
-        }
-
-        cache2q.dump_queues ();
-
     }
 
     std::cout << GRN "### number of hits = " YEL << hits << std::endl;
