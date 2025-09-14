@@ -1,5 +1,5 @@
 # 2Q_cache
-Implementation of the 2Q cache algorithm and comparison of its efficiency with the "ideal" cache
+Implementation of the 2Q cache algorithm and comparison of its efficiency with the "perfect" cache
 
 ## Content
 - [0. Run the program](#run-the-program)
