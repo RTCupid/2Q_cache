@@ -2,7 +2,7 @@
 #include <cassert>
 
 #include "../hdr/cache2q.hpp"
-#include "../colors.h"
+#include "../common/colors.h"
 
 page_t the_slowest_function_to_get_int_element (int key) { return key; }
 
