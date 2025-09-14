@@ -1,47 +1,43 @@
 # 2Q_cache
-Реализация алгоритма 2Q кеша и сравнение его эффективности с "идеальным" кешом
+Implementation of the 2Q cache algorithm and comparison of its efficiency with the "ideal" cache
 
-## Содержание
-- [0. Запуск программы](#запуск-программы)
-- [1. Аннотация](#аннотация)
-- [2. Введение](#введение)
-- [3. Методика](#методика)
-- [4. Результаты и их обсуждение](#результаты-и-их-обсуждение)
-- [5. Выводы](#выводы)
+## Content
+- [0. Run the program](#run-the-program)
+- [1. Annotation](#annotation)
+- [2. Introduction](#introduction)
+- [3. Methods](#methods)
+- [4. Results](#results)
+- [5. Сonclusions](#conclusions)
 
-## Запуск программы
-1) Склонировать репозиторий
+## Run the program
+1) Clone the repository
 ```shell
 git clone ...
 ```
-2) Перейти в папку репозитория
+2) Go to repository folder
 ```bash
 cd 2Q_cache
 ```
-3) Создать папку build и перейти в неё
+3) Create a build folder and go to it
 ```bash
 mkdir build && cd build
 ```
-4) При помощи cmake сгенерировать файл для сборки
+4) Generate a file for assembly using cmake
 ```bash
 cmake -DCMAKE_BUILD_TYPE=RELEASE ..
 ```
-5) Собрать проект
+5) Assemble the project
 ```bash
 cmake --build .
 ```
-6) Запустить исполняемый файл
+6) Run the executable file
 ```bash
 ./cache
 ```
 
-## Аннотация
-
-## Введение
-
-## Методика
-
-## Результаты и их обсуждение
-
-## Выводы
+## Annotation
+## Introduction
+## Methods
+## Results
+## Сonclusions
 
