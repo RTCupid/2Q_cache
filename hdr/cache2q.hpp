@@ -11,7 +11,7 @@
 
 #ifdef DEBUG
 #define DEBUG_PRINT(fmt, ...) \
-    printf("[DEBUG] %s:%d: " fmt, __FILE__, __LINE__, ##__VA_ARGS__)
+    printf(GRN "[DEBUG] %s:%d: " fmt RESET, __FILE__, __LINE__, ##__VA_ARGS__)
 #else
 #define DEBUG_PRINT(fmt, ...)
 #endif
@@ -31,12 +31,13 @@ enum queue_t {
 template <typename ElemT, typename KeyT>
 class cache2q_t {
 
-    std::list<ElemT> list_in_;
+    std::list<typename std::pair<KeyT, ElemT>> list_in_;
     std::list<ElemT> list_main_;
     std::list<KeyT>  list_out_;
 
-    std::unordered_map<KeyT, std::pair<typename std::list<ElemT>::iterator, queue_t>> hash_table_in_and_main_;
-    std::unordered_map<KeyT, typename std::list<KeyT>::iterator>  hash_table_out_;
+    std::unordered_map<KeyT, typename std::list<KeyT, ElemT>::iterator> hash_table_in_;
+    std::unordered_map<KeyT, typename std::list<ElemT>::iterator>       hash_table_main_;
+    std::unordered_map<KeyT, typename std::list<KeyT>::iterator>        hash_table_out_;
 
 public:
     cache2q_t (size_t size) {
@@ -61,17 +62,22 @@ public:
 
         DEBUG_PRINT("Start search:\n");
 
-        auto data_from_key = hash_table_in_and_main_.find (key);
+        auto data_from_key_in = hash_table_in_.find (key);
 
-        DEBUG_PRINT("End search in hashtable main and in\n");
+        if (data_from_key_in != hash_table_in_.end ()) {
 
-        if (data_from_key != hash_table_in_and_main_.end ()) {
+            DEBUG_PRINT("It's in queue in\n");
 
-            if (hash_table_in_and_main_[key].second == queue_t::MAIN) {
+        }
 
-                list_main_.splice (list_main_.begin (), list_main_, hash_table_in_and_main_[key].first);
-                hash_table_in_and_main_[key] = std::make_pair (list_main_.begin (), queue_t::MAIN);
-            }
+        DEBUG_PRINT("End search in hashtable in, start search in hashtable main\n");
+
+        auto data_from_key_main = hash_table_main_.find (key);
+
+        if (data_from_key_main != hash_table_main_.end ()) {
+
+            list_main_.splice (list_main_.begin (), list_main_, hash_table_main_[key].first);
+            hash_table_main_[key] = list_main_.begin ();
 
             return true;
         }
@@ -122,8 +128,8 @@ private:
 
         DEBUG_PRINT("list in isn't full now, so insert\n");
 
-        list_in_.push_front (new_elem_to_in);
-        hash_table_in_and_main_[key] = std::make_pair (list_in_.begin (), queue_t::IN);
+        list_in_.push_front (std::make_pair(key, new_elem_to_in));
+        hash_table_in_[key] = list_in_.begin ();
 
         DEBUG_PRINT("inserted to in\n");
     }
@@ -134,7 +140,7 @@ private:
             erase_last_elem_from_main (key);
 
         list_main_.push_front (new_elem_to_main);
-        hash_table_in_and_main_[key] = std::make_pair (list_main_.begin (), queue_t::MAIN);
+        hash_table_main_[key] = list_main_.begin ();
     }
 
     void insert_to_out (KeyT key) {
@@ -169,7 +175,7 @@ private:
 
         DEBUG_PRINT("erased element from list in, start to erase element from hashtable in and main\n");
 
-        hash_table_in_and_main_.erase (key);
+        hash_table_in_.erase (key);
 
         DEBUG_PRINT("end of erasing element from in\n");
     }
@@ -178,7 +184,7 @@ private:
 
         list_main_.pop_back ();
 
-        hash_table_in_and_main_.erase (key);
+        hash_table_main_.erase (key);
     }
 
     void dump_queues () const {
