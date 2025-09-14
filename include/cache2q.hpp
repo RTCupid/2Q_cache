@@ -15,7 +15,7 @@ class cache2q_t {
     static constexpr float FACTOR_SIZE_LIST_MAIN = 0.2f;
     static constexpr float FACTOR_SIZE_LIST_OUT  = 0.6f;
 
-    static_assert(FACTOR_SIZE_LIST_IN + FACTOR_SIZE_LIST_MAIN + FACTOR_SIZE_LIST_OUT == 1.0f, "Sum of factors must be 1.0");
+    static_assert (FACTOR_SIZE_LIST_IN + FACTOR_SIZE_LIST_MAIN + FACTOR_SIZE_LIST_OUT == 1.0f, "Sum of factors must be 1.0f\n");
 
     static constexpr size_t MINIMAL_CAPACITY     = 5;
 
@@ -25,6 +25,8 @@ class cache2q_t {
     using KeyListT  = std::list<KeyT>;
     using KeyIterT  = KeyListT::iterator;
 
+    using FuncToGetElem = std::function<ElemT(KeyT)>;
+
     ElemListT list_in_;
     ElemListT list_main_;
     KeyListT  list_out_;
@@ -33,8 +35,15 @@ class cache2q_t {
     std::unordered_map<KeyT, ElemIterT> hash_table_main_;
     std::unordered_map<KeyT, KeyIterT>  hash_table_out_;
 
+    FuncToGetElem slow_get_elem_;
+
+    const size_t size_;
+    const size_t size_list_in_;
+    const size_t size_list_main_;
+    const size_t size_list_out_;
+
 public:
-    explicit cache2q_t (size_t size, std::function<ElemT(KeyT)> slow_get_elem) :
+    explicit cache2q_t (size_t size, FuncToGetElem slow_get_elem) :
 
         size_           (std::max (size, MINIMAL_CAPACITY)),
 
@@ -111,12 +120,6 @@ public:
     }
 
 private:
-    const size_t size_;
-    const size_t size_list_in_;
-    const size_t size_list_main_;
-    const size_t size_list_out_;
-
-    std::function<ElemT(KeyT)> slow_get_elem_;
 
     void insert_to_in (KeyT& key, ElemT& new_elem_to_in) {
 
