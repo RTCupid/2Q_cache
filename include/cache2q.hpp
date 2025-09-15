@@ -9,15 +9,15 @@
 #include "colors.h"
 
 template <typename KeyT, typename ElemT>
-class cache2q_t {
+class cache2q {
 
-    static constexpr float FACTOR_SIZE_LIST_IN   = 0.2f;
-    static constexpr float FACTOR_SIZE_LIST_MAIN = 0.2f;
-    static constexpr float FACTOR_SIZE_LIST_OUT  = 0.6f;
+    static constexpr float factor_size_list_in_   = 0.2f;
+    static constexpr float factor_size_list_main_ = 0.2f;
+    static constexpr float factor_size_list_out_  = 0.6f;
 
-    static_assert (FACTOR_SIZE_LIST_IN + FACTOR_SIZE_LIST_MAIN + FACTOR_SIZE_LIST_OUT == 1.0f, "Sum of factors must be 1.0f\n");
+    static_assert (factor_size_list_in_ + factor_size_list_main_ + factor_size_list_out_ == 1.0f, "Sum of factors must be 1.0f\n");
 
-    static constexpr size_t MINIMAL_CAPACITY     = 5;
+    static constexpr size_t minimal_capacity_ = 5;
 
     using ElemListT = std::list<std::pair<KeyT, ElemT>>;
     using ElemIterT = ElemListT::iterator;
@@ -43,15 +43,15 @@ class cache2q_t {
     const size_t size_list_out_;
 
 public:
-    explicit cache2q_t (size_t size, FuncToGetElem slow_get_elem) :
+    cache2q (size_t size, FuncToGetElem slow_get_elem) :
 
-        size_           (std::max (size, MINIMAL_CAPACITY)),
+        size_           (std::max (size, minimal_capacity_)),
 
-        size_list_in_   (size_ * FACTOR_SIZE_LIST_IN),
+        size_list_in_   (size_ * factor_size_list_in_),
 
-        size_list_main_ (size_ * FACTOR_SIZE_LIST_MAIN),
+        size_list_main_ (size_ * factor_size_list_main_),
 
-        size_list_out_  (size_ * FACTOR_SIZE_LIST_OUT),
+        size_list_out_  (size_ * factor_size_list_out_),
 
         slow_get_elem_  (slow_get_elem) {
     }

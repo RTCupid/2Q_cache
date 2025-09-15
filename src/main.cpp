@@ -8,31 +8,42 @@ int slow_func_to_get_int_element (int key) { return key; }
 
 int main () {
 
-    size_t cache_size = 0;
+    size_t cache_size;
 
     std::cin >> cache_size;
-    assert (std::cin.good());
+    if (!std::cin.good()) {
 
-    cache2q_t<int, int> cache2q(cache_size, slow_func_to_get_int_element);
+        std::cerr << "error reading cache size\n";
+        return EXIT_FAILURE;
+    }
 
-    size_t number_elems = 0;
+    cache2q<int, int> cache(cache_size, slow_func_to_get_int_element);
+
+    size_t number_elems;
 
     std::cin >> number_elems;
-    assert (std::cin.good());
+    if (!std::cin.good()) {
 
-    int page_id = 0;
+        std::cerr << "error reading number elements\n";
+        return EXIT_FAILURE;
+    }
+
+    int page_id;
     size_t hits = 0;
 
     for (size_t i = 0; i < number_elems; i++) {
 
         std::cin  >> page_id;
-        assert (std::cin.good());
+        if (!std::cin.good()) {
 
-        if (cache2q.lookup_update (page_id))
-            hits++;
+            std::cerr << "error reading page_id " << i << '\n';
+            return EXIT_FAILURE;
+        }
+
+        hits += cache.lookup_update (page_id);
     }
 
-    std::cout << GRN "### number of hits = " YEL << hits << std::endl;
+    std::cout << hits << '\n';
 
     return 0;
 }
