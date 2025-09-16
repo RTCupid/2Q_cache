@@ -34,6 +34,10 @@ cmake --build .
 ```bash
 ./cache
 ```
+6) *Or run tests
+```bash
+./cache_tests
+```
 
 ## Annotation
 ## Introduction
