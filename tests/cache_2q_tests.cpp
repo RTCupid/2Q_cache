@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <iostream>
 
 #include "cache_2q.hpp"
 
@@ -71,8 +70,8 @@ struct test_t
     size_t cache_hits;
 };
 
-TEST (cache2q, end_to_end_tests) {
-
+TEST (cache2q, end_to_end_tests)
+{
     test_t arr_tests[] = {
         {
             5,
