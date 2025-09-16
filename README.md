@@ -32,7 +32,7 @@ cmake --build .
 ```
 6) Run the executable file
 ```bash
-./bin/cache
+./cache
 ```
 
 ## Annotation
