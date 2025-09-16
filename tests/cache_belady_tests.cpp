@@ -23,10 +23,16 @@ TEST (cache_belady, end_to_end_tests)
             10,
             {1, 2, 3, 4, 1, 6, 3, 6, 3, 7},
             4
+        },
+        {
+            3,
+            12,
+            {1, 2, 3, 4, 1, 3, 5, 6, 8, 7, 2, 1},
+            
         }
     };
 
-    size_t number_tests = 1;
+    size_t number_tests = 11;
 
     for (size_t n_test = 0; n_test < number_tests; n_test++)
     {
@@ -49,13 +55,8 @@ TEST (cache_belady, end_to_end_tests)
         size_t cache_hits = 0;
 
         // act
-        for (size_t ind_elem = 0; ind_elem < actual_size; ind_elem++) {
-            std::cout << "input elem: " << vector_elements[ind_elem] << '\n';
-
+        for (size_t ind_elem = 0; ind_elem < actual_size; ind_elem++)
             cache_hits += cache.lookup_update (vector_elements[ind_elem]);
-
-            cache.dump ();
-        }
 
         // assert
         EXPECT_EQ (cache_hits, arr_tests[n_test].cache_hits);

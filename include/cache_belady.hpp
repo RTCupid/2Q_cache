@@ -63,7 +63,7 @@ private:
             KeyT   key = 0;
         } elem_to_erase;
 
-        std::cout << "ind_elems: " << ind_elems_ << "\n";
+        bool not_using_elem = false;
 
         for (auto &elem : cache_)
         {
@@ -78,9 +78,19 @@ private:
                         elem_to_erase.key      = key_elem;
                         elem_to_erase.distance = index - ind_elems_;
                     }
+
                     break;
                 }
+
+                if (index == input_elements_.size () - 1)
+                {
+                    elem_to_erase.key      = key_elem;
+                    not_using_elem = true;
+                }
             }
+
+            if (not_using_elem)
+                break;
         }
 
         cache_.erase (elem_to_erase.key);
