@@ -30,11 +30,15 @@ cmake -DCMAKE_BUILD_TYPE=RELEASE ..
 ```bash
 cmake --build .
 ```
-6) Run the executable file
+6) Run the executable file of 2q cache
 ```bash
 ./cache
 ```
-6) *Or run tests
+6) *Or run the executable file of imitation belady cache
+```bash
+./cache_belady
+```
+6) **Or run tests
 ```bash
 ./cache_tests
 ```
