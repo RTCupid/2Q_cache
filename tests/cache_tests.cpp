@@ -1,10 +1,9 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-#include "cache2q.hpp"
+#include "cache_2q.hpp"
 
 int the_slowest_function_to_get_int_element (int key) { return key; }
-int run_cache_test (cache2q<int, int> cache);
 
 static const size_t CAPACITY_IN_TESTS = 20;
 

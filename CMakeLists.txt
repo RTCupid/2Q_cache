@@ -5,8 +5,11 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-add_executable(cache src/main.cpp)
+add_executable(cache src/main_2q.cpp)
 target_include_directories(cache PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+add_executable(cache_belady src/main_belady.cpp)
+target_include_directories(cache_belady PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 include(FetchContent)
 

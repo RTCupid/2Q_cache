@@ -45,17 +45,11 @@ class cache2q
 
 public:
     cache2q (size_t size, FuncToGetElem slow_get_elem) :
-
         size_           (std::max (size, minimal_capacity_)),
-
         size_list_in_   (size_ * factor_size_list_in_),
-
         size_list_main_ (size_ * factor_size_list_main_),
-
         size_list_out_  (size_ * factor_size_list_out_),
-
-        slow_get_elem_  (slow_get_elem) {
-    }
+        slow_get_elem_  (slow_get_elem) {}
 
     bool lookup_update (const KeyT &key)
     {
