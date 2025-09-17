@@ -32,7 +32,7 @@ cmake --build .
 ```
 6) Run the executable file of 2q cache
 ```bash
-./cache
+./cache_2q
 ```
 6) *Or run the executable file of imitation belady cache
 ```bash
@@ -40,7 +40,8 @@ cmake --build .
 ```
 6) **Or run tests
 ```bash
-./cache_tests
+./cache_2q_tests
+./cache_belady_tests
 ```
 
 ## Annotation
