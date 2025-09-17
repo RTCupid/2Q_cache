@@ -28,11 +28,11 @@ TEST (cache_belady, end_to_end_tests)
             3,
             12,
             {1, 2, 3, 4, 1, 3, 5, 6, 8, 7, 2, 1},
-            
+            3
         }
     };
 
-    size_t number_tests = 11;
+    size_t number_tests = 2;
 
     for (size_t n_test = 0; n_test < number_tests; n_test++)
     {
@@ -52,7 +52,7 @@ TEST (cache_belady, end_to_end_tests)
 
         belady_cache<int, int> cache(cache_size, the_slowest_function_to_get_int_element, vector_elements);
 
-        size_t cache_hits = 0;
+        int cache_hits = 0;
 
         // act
         for (size_t ind_elem = 0; ind_elem < actual_size; ind_elem++)

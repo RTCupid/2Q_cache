@@ -8,11 +8,10 @@
 template <typename KeyT, typename ElemT>
 class belady_cache
 {
-    size_t size_;
-    size_t number_input_elements_;
-
     using KeyVectorT  = std::vector<KeyT>;
     using FuncToGetElem = std::function<ElemT(const KeyT &)>;
+
+    size_t size_;
 
     KeyVectorT  input_elements_;
     size_t      ind_elems_;
@@ -20,11 +19,10 @@ class belady_cache
     std::unordered_map<KeyT, ElemT> cache_;
 
 public:
-    belady_cache (size_t size, FuncToGetElem slow_get_elem, KeyVectorT input_elements) :
+    belady_cache (size_t size, FuncToGetElem slow_get_elem, KeyVectorT &input_elements) :
         size_ (size),
         slow_get_elem_ (slow_get_elem),
         input_elements_ (input_elements),
-        number_input_elements_ (input_elements_.size ()),
         ind_elems_ (0) {}
 
     bool lookup_update (const KeyT &key)
@@ -35,16 +33,14 @@ public:
             return true;
 
         if (cache_.size () == size_)
-        {
             erase_elem_from_belady_cache ();
-        }
 
         cache_.try_emplace (key, slow_get_elem_ (key));
 
         return false;
     }
 
-    void dump ()
+    void dump () const
     {
         std::cout << "Dump:\n";
 
@@ -65,17 +61,24 @@ private:
 
         bool not_using_elem = false;
 
+        if (ind_elems_ == input_elements_.size ())
+        {
+            auto first_iterator = cache_.begin();
+            cache_.erase(first_iterator);
+            return;
+        }
+
         for (auto &elem : cache_)
         {
-            auto key_elem = elem.first;
-
             for (auto index = ind_elems_; index < input_elements_.size (); index++)
             {
-                if (input_elements_.at(index) == key_elem)
+                assert (index < input_elements_.size ());
+
+                if (input_elements_[index] == elem.first)
                 {
                     if (index - ind_elems_ > elem_to_erase.distance)
                     {
-                        elem_to_erase.key      = key_elem;
+                        elem_to_erase.key      = elem.first;
                         elem_to_erase.distance = index - ind_elems_;
                     }
 
@@ -84,7 +87,7 @@ private:
 
                 if (index == input_elements_.size () - 1)
                 {
-                    elem_to_erase.key      = key_elem;
+                    elem_to_erase.key      = elem.first;
                     not_using_elem = true;
                 }
             }

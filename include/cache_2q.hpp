@@ -54,9 +54,7 @@ public:
     bool lookup_update (const KeyT &key)
     {
         if (hash_table_in_.contains (key) )
-        {
             return true;
-        }
 
         auto data_from_key_main = hash_table_main_.find (key);
 
@@ -72,15 +70,15 @@ public:
 
         auto data_from_key_out = hash_table_out_.find (key);
 
-        if (data_from_key_out != hash_table_out_.end ())
+        if (data_from_key_out == hash_table_out_.end ())
+            insert_to_in (key, new_elem);
+        else
         {
             insert_to_main (key, new_elem);
 
             hash_table_out_.erase (*data_from_key_out->second);
             list_out_.erase (data_from_key_out->second);
         }
-        else
-            insert_to_in (key, new_elem);
 
         return false;
     }
@@ -123,7 +121,7 @@ private:
             list_in_.pop_back ();
         }
 
-        list_in_.push_front (std::make_pair(key, new_elem_to_in));
+        list_in_.emplace_front (key, new_elem_to_in);
         hash_table_in_.try_emplace (key, list_in_.begin ());
     }
 
@@ -135,7 +133,7 @@ private:
             list_main_.pop_back ();
         }
 
-        list_main_.push_front (std::make_pair(key, new_elem_to_main));
+        list_main_.emplace_front (key, new_elem_to_main);
         hash_table_main_.try_emplace (key, list_main_.begin ());
     }
 
@@ -144,7 +142,7 @@ private:
         if (list_out_.size () == size_list_out_)
             list_out_.pop_back ();
 
-        list_out_.push_front (key);
+        list_out_.emplace_front (key);
         hash_table_out_.try_emplace (key, list_out_.begin ());
     }
 };

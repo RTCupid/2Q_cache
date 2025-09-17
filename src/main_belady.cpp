@@ -43,18 +43,12 @@ int main ()
 
     belady_cache<int, int> cache (cache_size, slow_func_to_get_int_element, vector_elements);
 
-    size_t hits = 0;
+    size_t cache_hits = 0;
 
-    for (size_t i = 0; i < number_elems; i++)
-    {
-        page_id = vector_elements.back ();
+    for (size_t ind_elem = 0; ind_elem < number_elems; ind_elem++)
+            cache_hits += cache.lookup_update (vector_elements[ind_elem]);
 
-        hits += cache.lookup_update (page_id);
-
-        vector_elements.pop_back ();
-    }
-
-    std::cout << hits << '\n';
+    std::cout << cache_hits << '\n';
 
     return 0;
 }
