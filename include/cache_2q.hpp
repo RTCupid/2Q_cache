@@ -76,7 +76,7 @@ public:
         {
             insert_to_main (key, new_elem);
 
-            hash_table_out_.erase (*data_from_key_out->second);
+            hash_table_out_.erase (key);
             list_out_.erase (data_from_key_out->second);
         }
 
