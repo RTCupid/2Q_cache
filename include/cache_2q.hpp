@@ -76,7 +76,7 @@ public:
         {
             insert_to_main (key, new_elem);
 
-            hash_table_out_.erase (key);
+            hash_table_out_.erase (data_from_key_out);
             list_out_.erase (data_from_key_out->second);
         }
 
@@ -109,12 +109,38 @@ public:
         std::cout << '\n';
     }
 
+    void dump_hash_tables () const
+    {
+        std::cout << GRN "start -> end\n" RESET;
+
+        std::cout << MAG "hash_table in:\n" CYN;
+
+        for (auto &elem_iter : hash_table_in_)
+            std::cout << elem_iter.first << ' ';
+
+        std::cout << '\n';
+
+        std::cout << MAG "hash_table main:\n" CYN;
+
+        for (auto &elem_iter : hash_table_main_)
+            std::cout << elem_iter.first << ' ';
+
+        std::cout << '\n';
+
+        std::cout << MAG "hash_table out:\n" CYN;
+
+        for (auto &key_iter : hash_table_out_)
+            std::cout << key_iter.first << ' ';
+
+        std::cout << '\n';
+    }
+
 private:
 
     void insert_to_in (const KeyT &key, ElemT &new_elem_to_in)
     {
-        if (list_in_.size () >= size_list_in_) {
-
+        if (list_in_.size () == size_list_in_)
+        {
             insert_to_out (list_in_.back ().first);
 
             hash_table_in_.erase (list_in_.back ().first);
@@ -140,7 +166,10 @@ private:
     void insert_to_out (const KeyT &key)
     {
         if (list_out_.size () == size_list_out_)
+        {
+            hash_table_out_.erase (list_out_.back ());
             list_out_.pop_back ();
+        }
 
         list_out_.emplace_front (key);
         hash_table_out_.try_emplace (key, list_out_.begin ());

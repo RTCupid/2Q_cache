@@ -114,10 +114,16 @@ TEST (cache2q, end_to_end_tests)
             10,
             {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
             9
-        }
+        },
+        {
+            5,
+            22,
+            {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 1, 1},
+            1
+        },
     };
 
-    size_t number_tests = 7;
+    size_t number_tests = 8;
 
     // arrange
     for (size_t n_test = 0; n_test < number_tests; n_test++)
@@ -131,8 +137,11 @@ TEST (cache2q, end_to_end_tests)
         size_t cache_hits = 0;
 
         for (int ind_elem = 0; ind_elem < number_elements; ind_elem++)
+        {
             cache_hits += cache.lookup_update (arr_tests[n_test].elements[ind_elem]);
-
+            cache.dump_queues ();
+            cache.dump_hash_tables ();
+        }
         EXPECT_EQ (cache_hits, arr_tests[n_test].cache_hits);
     }
 }
