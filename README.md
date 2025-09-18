@@ -165,7 +165,7 @@ In certain cases, such as Test 7 which used a linear access sequence, the `2Q ca
 However, for other patterns, notably in Tests 2 and 4, its performance was much more effective, yielding hit-rate statistics that closely approximated those of the `Belady` benchmark.
 
 ## Run the program
-
+### Run
 1) Clone the repository
 ```shell
 git clone ...
@@ -198,4 +198,18 @@ cmake --build .
 ```bash
 ./cache_2q_tests
 ./cache_belady_tests
+```
+### Project structure
+```tree
+2Q_cache/
+├── CMakeLists.txt
+├── include
+│   ├── cache_2q.hpp
+│   ├── cache_belady.hpp
+├── src
+│   ├── main_2q.cpp
+│   └── main_belady.cpp
+└── tests
+    ├── cache_2q_tests.cpp
+    └── cache_belady_tests.cpp
 ```
