@@ -1,5 +1,7 @@
-# 2Q_cache
-Implementation of the `2Q cache` algorithm and comparison of its efficiency with the `Belady cache`
+<div align="center">
+  
+  # Implementation of the `2Q cache` algorithm in C++ and comparison of its efficiency with the `Belady cache`
+  </div>
 
 ## Content
 - [1. Annotation](#annotation)
