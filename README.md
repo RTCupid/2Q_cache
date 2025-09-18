@@ -21,10 +21,12 @@ A more efficient approach is to implement a local data store, or cache, which ho
 
 ## Methods
 ### 2Q cache
-<div align="center"><img src="img/cache_2q"></div><br>
+<div align="center"><img src="img/cache_2q.jpg"></div><br>
   <div align="center"> Fig 1. 2Q cache</div><br>
 
 ### Belady cache
+<div align="center"><img src="img/cache_belady.jpg"></div><br>
+  <div align="center"> Fig 2. Belady cache</div><br>
 
 ## Results
 ## Сonclusions
