@@ -9,7 +9,28 @@ Implementation of the 2Q cache algorithm and comparison of its efficiency with t
 - [4. Results](#results)
 - [5. Сonclusions](#conclusions)
 
+## Annotation
+Implementations of the 2q cache and the Belady cache have been developed. A comparison of their efficiency revealed that the 2q cache has good precision.
+
+## Introduction
+In industrial applications, data is frequently retrieved from remote devices or servers. This downloading process is often time-consuming and can significantly degrade overall system performance.
+
+While one potential solution is to create faster download methods, their development is typically costly and does not always lead to substantial gains.
+
+A more efficient approach is to implement a local data store, or cache, which holds frequently accessed information. The strategy used to predict which data will be needed again is managed by a caching algorithm. This program implements two such algorithms—the 2Q and the Belady algorithms—and provides a comparative analysis of their effectiveness.
+
+## Methods
+### 2Q cache
+<div align="center"><img src="img/cache_2q"></div><br>
+  <div align="center"> Fig 1. 2Q cache</div><br>
+
+### Belady cache
+
+## Results
+## Сonclusions
+
 ## Run the program
+
 1) Clone the repository
 ```shell
 git clone ...
@@ -43,10 +64,3 @@ cmake --build .
 ./cache_2q_tests
 ./cache_belady_tests
 ```
-
-## Annotation
-## Introduction
-## Methods
-## Results
-## Сonclusions
-
