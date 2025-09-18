@@ -2,28 +2,28 @@
 
 #include "cache_2q.hpp"
 
-int the_slowest_function_to_get_int_element (int key) { return key; }
+int slow_get_elem (int key) { return key; }
 
-static const size_t CAPACITY_IN_TESTS = 20;
+static const size_t capacity_in_tests = 20;
 
-static constexpr float FACTOR_SIZE_LIST_IN   = 0.2f;
-static constexpr float FACTOR_SIZE_LIST_MAIN = 0.2f;
-static constexpr float FACTOR_SIZE_LIST_OUT  = 0.6f;
+static constexpr float factor_size_list_in   = 0.2f;
+static constexpr float factor_size_list_main = 0.2f;
+static constexpr float factor_size_list_out  = 0.6f;
 
 TEST (cache2q, overflow_queue_in)
 {
     // arrange
-    size_t cache_size = CAPACITY_IN_TESTS;
+    size_t cache_size = capacity_in_tests;
 
-    cache2q<int, int> cache(cache_size, the_slowest_function_to_get_int_element);
+    cache2q<int, int> cache(cache_size, slow_get_elem);
 
     // act
-    for (int i = 0; i <= cache_size * FACTOR_SIZE_LIST_IN; i++)
+    for (int i = 0; i <= cache_size * factor_size_list_in; i++)
         cache.lookup_update (i);
-    // there queue in is full and include 1...(cache_size * FACTOR_SIZE_LIST_IN - 1), and not include 0
+    // there queue in is full and include 1...(cache_size * factor_size_list_in - 1), and not include 0
 
     // assert
-    for (int i = 1; i < cache_size * FACTOR_SIZE_LIST_IN; i++)
+    for (int i = 1; i < cache_size * factor_size_list_in; i++)
         EXPECT_TRUE (cache.lookup_update (i));
 
     EXPECT_FALSE (cache.lookup_update (0));
@@ -32,12 +32,12 @@ TEST (cache2q, overflow_queue_in)
 TEST (cache2q, overflow_queue_main)
 {
     // arrange
-    size_t cache_size = CAPACITY_IN_TESTS;
+    size_t cache_size = capacity_in_tests;
 
-    cache2q<int, int> cache(cache_size, the_slowest_function_to_get_int_element);
+    cache2q<int, int> cache(cache_size, slow_get_elem);
 
-    auto size_list_in   = cache_size * FACTOR_SIZE_LIST_IN;
-    auto size_list_main = cache_size * FACTOR_SIZE_LIST_MAIN;
+    auto size_list_in   = cache_size * factor_size_list_in;
+    auto size_list_main = cache_size * factor_size_list_main;
     auto num_different_elements = size_list_in + size_list_main;
 
     // act
@@ -130,18 +130,15 @@ TEST (cache2q, end_to_end_tests)
     {
         size_t cache_size = arr_tests[n_test].cache_size;
 
-        cache2q<int, int> cache(cache_size, the_slowest_function_to_get_int_element);
+        cache2q<int, int> cache(cache_size, slow_get_elem);
 
         size_t number_elements = arr_tests[n_test].number_elements;
 
         size_t cache_hits = 0;
 
         for (int ind_elem = 0; ind_elem < number_elements; ind_elem++)
-        {
             cache_hits += cache.lookup_update (arr_tests[n_test].elements[ind_elem]);
-            cache.dump_queues ();
-            cache.dump_hash_tables ();
-        }
+
         EXPECT_EQ (cache_hits, arr_tests[n_test].cache_hits);
     }
 }

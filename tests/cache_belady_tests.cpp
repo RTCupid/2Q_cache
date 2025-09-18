@@ -4,7 +4,7 @@
 
 #include "cache_belady.hpp"
 
-int the_slowest_function_to_get_int_element (int key) { return key; }
+int slow_get_elem (int key) { return key; }
 
 struct test_t
 {
@@ -50,7 +50,7 @@ TEST (cache_belady, end_to_end_tests)
             vector_elements.emplace_back (elements[i]);
         }
 
-        belady_cache<int, int> cache(cache_size, the_slowest_function_to_get_int_element, vector_elements);
+        belady_cache<int, int> cache(cache_size, slow_get_elem, vector_elements);
 
         int cache_hits = 0;
 
