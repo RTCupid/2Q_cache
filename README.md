@@ -1,6 +1,12 @@
 <div align="center">
   
   # Implementation of the `2Q cache` algorithm in C++ and comparison of its efficiency with the `Belady cache`
+  ![C++](https://img.shields.io/badge/C++-23-blue?style=for-the-badge&logo=cplusplus)
+  ![CMake](https://img.shields.io/badge/CMake-3.11+-green?style=for-the-badge&logo=cmake)
+  ![Testing](https://img.shields.io/badge/Google_Test-Framework-red?style=for-the-badge&logo=google)
+  ![Cache Hits](https://img.shields.io/badge/Optimal-Belady_Algorithm-purple?style=for-the-badge)
+  
+  • 🚀 **2Q cache algorithm**
   </div>
 
 ## Content
