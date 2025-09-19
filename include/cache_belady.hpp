@@ -33,7 +33,12 @@ public:
             return true;
 
         if (cache_.size () == size_)
-            erase_elem_from_belady_cache ();
+        {
+            if (erase_elem_from_belady_cache (key))
+                cache_.try_emplace (key, slow_get_elem_ (key));
+
+            return false;
+        }
 
         cache_.try_emplace (key, slow_get_elem_ (key));
 
@@ -51,21 +56,30 @@ public:
     }
 
 private:
-    void erase_elem_from_belady_cache ()
+    bool erase_elem_from_belady_cache (const KeyT &key_input_elem)
     {
-        struct
-        {
-            size_t distance = 0;
-            KeyT   key = 0;
-        } elem_to_erase;
+        size_t distance_elem_to_erase = 0;
+        KeyT   key_elem_to_erase = 0;
+
+        size_t distance_input_elem = 0;
 
         bool not_using_elem = false;
 
         if (ind_elems_ == input_elements_.size ())
+            return false;
+
+        for (auto index = ind_elems_; index < input_elements_.size (); index++)
         {
-            auto first_iterator = cache_.begin();
-            cache_.erase(first_iterator);
-            return;
+            assert (index < input_elements_.size ());
+
+            if (input_elements_[index] == key_input_elem)
+            {
+                distance_input_elem = index - ind_elems_;
+                break;
+            }
+
+            if (index == input_elements_.size () - 1)
+                return false;
         }
 
         for (auto &elem : cache_)
@@ -76,10 +90,10 @@ private:
 
                 if (input_elements_[index] == elem.first)
                 {
-                    if (index - ind_elems_ > elem_to_erase.distance)
+                    if (index - ind_elems_ > distance_elem_to_erase)
                     {
-                        elem_to_erase.key      = elem.first;
-                        elem_to_erase.distance = index - ind_elems_;
+                        key_elem_to_erase      = elem.first;
+                        distance_elem_to_erase = index - ind_elems_;
                     }
 
                     break;
@@ -87,8 +101,10 @@ private:
 
                 if (index == input_elements_.size () - 1)
                 {
-                    elem_to_erase.key      = elem.first;
-                    not_using_elem = true;
+                    key_elem_to_erase      = elem.first;
+                    distance_elem_to_erase = index - ind_elems_;
+                    not_using_elem         = true;
+                    break;
                 }
             }
 
@@ -96,7 +112,13 @@ private:
                 break;
         }
 
-        cache_.erase (elem_to_erase.key);
+        if (distance_elem_to_erase > distance_input_elem)
+        {
+            cache_.erase (key_elem_to_erase);
+            return true;
+        }
+
+        return false;
     }
 };
 
