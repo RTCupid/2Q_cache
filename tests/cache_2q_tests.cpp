@@ -4,7 +4,7 @@
 
 int slow_get_elem (int key) { return key; }
 
-static const size_t capacity_in_tests = 20;
+static constexpr size_t capacity_in_tests = 20;
 
 static constexpr float factor_size_list_in   = 0.2f;
 static constexpr float factor_size_list_main = 0.2f;
@@ -13,17 +13,14 @@ static constexpr float factor_size_list_out  = 0.6f;
 TEST (cache2q, overflow_queue_in)
 {
     // arrange
-    size_t cache_size = capacity_in_tests;
-
-    cache2q<int, int> cache(cache_size, slow_get_elem);
+    cache2q<int, int> cache(capacity_in_tests, slow_get_elem);
 
     // act
-    for (int i = 0; i <= cache_size * factor_size_list_in; i++)
+    for (int i = 0; i <= capacity_in_tests * factor_size_list_in; i++)
         cache.lookup_update (i);
-    // there queue in is full and include 1...(cache_size * factor_size_list_in - 1), and not include 0
 
     // assert
-    for (int i = 1; i < cache_size * factor_size_list_in; i++)
+    for (int i = 1; i < capacity_in_tests * factor_size_list_in; i++)
         EXPECT_TRUE (cache.lookup_update (i));
 
     EXPECT_FALSE (cache.lookup_update (0));
@@ -32,12 +29,10 @@ TEST (cache2q, overflow_queue_in)
 TEST (cache2q, overflow_queue_main)
 {
     // arrange
-    size_t cache_size = capacity_in_tests;
+    cache2q<int, int> cache(capacity_in_tests, slow_get_elem);
 
-    cache2q<int, int> cache(cache_size, slow_get_elem);
-
-    auto size_list_in   = cache_size * factor_size_list_in;
-    auto size_list_main = cache_size * factor_size_list_main;
+    auto size_list_in   = capacity_in_tests * factor_size_list_in;
+    auto size_list_main = capacity_in_tests * factor_size_list_main;
     auto num_different_elements = size_list_in + size_list_main;
 
     // act
@@ -50,8 +45,6 @@ TEST (cache2q, overflow_queue_main)
         cache.lookup_update (i);
         cache.lookup_update (i - size_list_in);
     }
-    // there queue in is full and include num_different_elements...num_different_elements - size_list_in,
-    // queue out is empty, queue main is full and include num_different_elements - size_list_in...1
 
     // assert
     for (int i = 1; i <= num_different_elements; i++)
@@ -125,9 +118,9 @@ TEST (cache2q, end_to_end_tests)
 
     size_t number_tests = 8;
 
-    // arrange
     for (size_t n_test = 0; n_test < number_tests; n_test++)
     {
+        // arrange
         size_t cache_size = arr_tests[n_test].cache_size;
 
         cache2q<int, int> cache(cache_size, slow_get_elem);
@@ -136,9 +129,11 @@ TEST (cache2q, end_to_end_tests)
 
         size_t cache_hits = 0;
 
+        // act
         for (int ind_elem = 0; ind_elem < number_elements; ind_elem++)
             cache_hits += cache.lookup_update (arr_tests[n_test].elements[ind_elem]);
 
+        // assert
         EXPECT_EQ (cache_hits, arr_tests[n_test].cache_hits);
     }
 }
