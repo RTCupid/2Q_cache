@@ -13,7 +13,6 @@ class belady_cache
     using FuncToGetElem = std::function<ElemT(const KeyT &)>;
 
     size_t size_;
-    KeyVectorT  input_elements_;
     size_t      current_index_;
     FuncToGetElem slow_get_elem_;
     std::unordered_map<KeyT, ElemT> cache_;
@@ -23,11 +22,10 @@ public:
     belady_cache (size_t size, FuncToGetElem slow_get_elem, KeyVectorT &input_elements) :
         size_ (size),
         slow_get_elem_ (slow_get_elem),
-        input_elements_ (input_elements),
         current_index_ (0)
     {
-        for (size_t i = 0; i < input_elements_.size (); ++i)
-            key_positions_[input_elements_[i]].push (i);
+        for (size_t i = 0; i < input_elements.size (); ++i)
+            key_positions_[input_elements[i]].push (i);
     }
 
     bool lookup_update (const KeyT &key)
