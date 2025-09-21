@@ -6,7 +6,6 @@
   ![Testing](https://img.shields.io/badge/Google_Test-Framework-red?style=for-the-badge&logo=google)
   ![Cache Hits](https://img.shields.io/badge/Optimal-Belady_Algorithm-purple?style=for-the-badge)
   
-  • 🚀 **2Q cache algorithm**
   </div>
 
 ## Content
@@ -119,10 +118,20 @@ class belady_cache
 
     size_t size_;
     KeyVectorT  input_elements_;
-    size_t      ind_elems_;
+    size_t      current_index_;
     FuncToGetElem slow_get_elem_;
     std::unordered_map<KeyT, ElemT> cache_;
+    std::unordered_map<KeyT, std::queue<size_t>> key_positions_;
 public:
+    belady_cache (size_t size, FuncToGetElem slow_get_elem, KeyVectorT &input_elements) :
+        size_ (size),
+        slow_get_elem_ (slow_get_elem),
+        input_elements_ (input_elements),
+        current_index_ (0)
+    {
+        for (size_t i = 0; i < input_elements_.size (); ++i)
+            key_positions_[input_elements_[i]].push (i);
+    }
     // methods
 };
 ```
@@ -134,10 +143,14 @@ Implementation of the `Belady cache` search algorithm and its updates:
 ```C++
 bool lookup_update (const KeyT &key)
 {
-    ++ind_elems_;
+    ++current_index_;
+    key_positions_[key].pop ();
 
     if (cache_.contains (key))
         return true;
+
+    if (key_positions_[key].empty ())
+        return false;
 
     if (cache_.size () == size_)
     {
@@ -168,6 +181,7 @@ Implementation of the function erase_elem_from_belady_cache () you can find in [
 |6| 10 32 4 7 10 4 7 10 13 16 4 7 10 13 16 19 22 4 7 10 13 16 19 22 25 28 4 7 10 13 16 19 4 7 | 10 | 23 |
 |7| 20 45 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 | 0 | 20 |
 |8| 15 38 3 7 12 3 7 12 17 22 3 7 12 17 22 27 32 3 7 12 17 22 27 32 37 3 7 12 17 22 27 32 37 3 7 12 17 22 27 7 3 | 21 | 30 |
+|9| ./huge_test | 30135 | 124450 |
 
 ## Сonclusions
 
