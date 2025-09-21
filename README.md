@@ -13,7 +13,7 @@
 - [2. Introduction](#introduction)
 - [3. Implementation of algorithms](#implementation-of-algorithms)
 - [4. Results](#results)
-- [5. Сonclusions](#conclusions)
+- [5. Conclusions](#conclusions)
 - [6. Run the program](#run-the-program)
 
 ## Annotation
@@ -183,9 +183,9 @@ Implementation of the function erase_elem_from_belady_cache () you can find in [
 |8| 15 38 3 7 12 3 7 12 17 22 3 7 12 17 22 27 32 3 7 12 17 22 27 32 37 3 7 12 17 22 27 32 37 3 7 12 17 22 27 7 3 | 21 | 30 |
 |9| ./huge_test | 30135 | 124450 |
 
-## Сonclusions
+## Conclusions
 
-Our analysis revealed that the performance of the `2Q` algorithm varies significantly depending on the access pattern.
+Analysis revealed that the performance of the `2Q` algorithm varies significantly depending on the access pattern.
 
 In certain cases, such as Test 7 which used a linear access sequence, the `2Q cache` incurred a substantially higher number of misses compared to the optimal `Belady` algorithm.
 
