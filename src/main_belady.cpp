@@ -46,7 +46,10 @@ int main ()
     size_t cache_hits = 0;
 
     for (size_t ind_elem = 0; ind_elem < number_elems; ind_elem++)
+    {
+            //std::cout << vector_elements[ind_elem] << ' ';
             cache_hits += cache.lookup_update (vector_elements[ind_elem]);
+    }
 
     std::cout << cache_hits << '\n';
 
