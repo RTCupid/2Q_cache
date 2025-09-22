@@ -1,5 +1,5 @@
-#ifndef PERFECT_CACHE_H
-#define PERFECT_CACHE_H
+#ifndef CACHE_BELADY_H
+#define CACHE_BELADY_H
 
 #include <iostream>
 #include <vector>
@@ -9,11 +9,12 @@
 template <typename KeyT, typename ElemT>
 class belady_cache
 {
-    using KeyVectorT  = std::vector<KeyT>;
+    using KeyVectorT    = std::vector<KeyT>;
     using FuncToGetElem = std::function<ElemT(const KeyT &)>;
+    using CacheIterT    = std::pair<KeyT, ElemT>;
 
     size_t size_;
-    size_t      current_index_;
+    size_t current_index_;
     FuncToGetElem slow_get_elem_;
     std::unordered_map<KeyT, ElemT> cache_;
     std::unordered_map<KeyT, std::queue<size_t>> key_positions_;
@@ -31,23 +32,24 @@ public:
     bool lookup_update (const KeyT &key)
     {
         ++current_index_;
-        key_positions_[key].pop ();
+        auto &key_deque = key_positions_[key];
+        key_deque.pop ();
 
         if (cache_.contains (key))
             return true;
 
-        if (key_positions_[key].empty ())
+        if (key_deque.empty ())
             return false;
 
         if (cache_.size () == size_)
         {
             if (erase_elem_from_belady_cache (key))
-                cache_.try_emplace (key, slow_get_elem_ (key));
+                cache_.emplace (key, slow_get_elem_ (key));
 
             return false;
         }
 
-        cache_.try_emplace (key, slow_get_elem_ (key));
+        cache_.emplace (key, slow_get_elem_ (key));
 
         return false;
     }
@@ -65,39 +67,35 @@ public:
 private:
     bool erase_elem_from_belady_cache (const KeyT &key_input_elem)
     {
-        KeyT key_to_erase;
-        size_t max_distance = key_positions_[key_input_elem].front () - current_index_;
-        bool found_erase_elem = false;
+        auto iter_elem_to_erase = cache_.end ();
+        size_t max_distance     = key_positions_[key_input_elem].front () - current_index_;
+        bool found_erase_elem   = false;
 
-        for (const auto& elem : cache_)
+        for (auto elem_iter = cache_.begin(); elem_iter != cache_.end(); ++elem_iter)
         {
-            KeyT key = elem.first;
+            auto &key_deque = key_positions_[elem_iter->first];
 
-            if (key_positions_[key].empty ())
+            if (key_deque.empty ())
             {
-                key_to_erase     = key;
-                found_erase_elem = true;
+                iter_elem_to_erase = elem_iter;
+                found_erase_elem   = true;
                 break;
             }
 
-            size_t distance = key_positions_[key].front () - current_index_;
+            size_t distance = key_deque.front () - current_index_;
 
             if (distance > max_distance)
             {
-                max_distance     = distance;
-                key_to_erase     = key;
-                found_erase_elem = true;
+                max_distance       = distance;
+                iter_elem_to_erase = elem_iter;
+                found_erase_elem   = true;
             }
         }
 
         if (found_erase_elem)
-        {
-            cache_.erase (key_to_erase);
+            cache_.erase (iter_elem_to_erase);
 
-            return true;
-        }
-
-        return false;
+        return found_erase_elem;
     }
 };
 

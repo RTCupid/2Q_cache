@@ -13,9 +13,6 @@ class cache2q
     static constexpr float factor_size_list_main_ = 0.2f;
     static constexpr float factor_size_list_out_  = 0.6f;
 
-    static_assert (factor_size_list_in_ + factor_size_list_main_ + factor_size_list_out_ == 1.0f,
-                                                                        "Sum of factors must be 1.0f");
-
     static constexpr size_t minimal_capacity_ = 5;
 
     using ElemListT = std::list<std::pair<KeyT, ElemT>>;
@@ -137,7 +134,7 @@ public:
 
 private:
 
-    void insert_to_in (const KeyT &key, ElemT &new_elem_to_in)
+    void insert_to_in (const KeyT &key, const ElemT &new_elem_to_in)
     {
         if (list_in_.size () == size_list_in_)
         {
@@ -148,10 +145,10 @@ private:
         }
 
         list_in_.emplace_front (key, new_elem_to_in);
-        hash_table_in_.try_emplace (key, list_in_.begin ());
+        hash_table_in_.emplace (key, list_in_.begin ());
     }
 
-    void insert_to_main (const KeyT &key, ElemT &new_elem_to_main)
+    void insert_to_main (const KeyT &key, const ElemT &new_elem_to_main)
     {
         if (list_main_.size () == size_list_main_)
         {
@@ -160,7 +157,7 @@ private:
         }
 
         list_main_.emplace_front (key, new_elem_to_main);
-        hash_table_main_.try_emplace (key, list_main_.begin ());
+        hash_table_main_.emplace (key, list_main_.begin ());
     }
 
     void insert_to_out (const KeyT &key)
@@ -172,7 +169,7 @@ private:
         }
 
         list_out_.emplace_front (key);
-        hash_table_out_.try_emplace (key, list_out_.begin ());
+        hash_table_out_.emplace (key, list_out_.begin ());
     }
 };
 

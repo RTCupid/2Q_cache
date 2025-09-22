@@ -2,7 +2,6 @@
 #include <cassert>
 
 #include "cache_2q.hpp"
-#include "colors.h"
 
 int slow_func_to_get_int_element (int key) { return key; }
 
