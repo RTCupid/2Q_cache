@@ -6,8 +6,6 @@
 #include <list>
 #include <unordered_map>
 
-#include "colors.h"
-
 template <typename KeyT, typename ElemT>
 class cache2q
 {
@@ -71,13 +69,15 @@ public:
         auto data_from_key_out = hash_table_out_.find (key);
 
         if (data_from_key_out == hash_table_out_.end ())
+        {
             insert_to_in (key, new_elem);
+        }
         else
         {
             insert_to_main (key, new_elem);
 
-            hash_table_out_.erase (data_from_key_out);
             list_out_.erase (data_from_key_out->second);
+            hash_table_out_.erase (data_from_key_out);
         }
 
         return false;
@@ -85,23 +85,23 @@ public:
 
     void dump_queues () const
     {
-        std::cout << GRN "start -> end\n" RESET;
+        std::cout << "start -> end\n";
 
-        std::cout << MAG "list in:\n" CYN;
+        std::cout << "list in:\n";
 
         for (auto &elem : list_in_)
             std::cout << elem.second << ' ';
 
         std::cout << '\n';
 
-        std::cout << MAG "list main:\n" CYN;
+        std::cout << "list main:\n";
 
         for (auto &elem : list_main_)
             std::cout << elem.second << ' ';
 
         std::cout << '\n';
 
-        std::cout << MAG "list out:\n" CYN;
+        std::cout << "list out:\n";
 
         for (auto &key : list_out_)
             std::cout << key << ' ';
@@ -111,23 +111,23 @@ public:
 
     void dump_hash_tables () const
     {
-        std::cout << GRN "start -> end\n" RESET;
+        std::cout << "start -> end\n";
 
-        std::cout << MAG "hash_table in:\n" CYN;
+        std::cout << "hash_table in:\n";
 
         for (auto &elem_iter : hash_table_in_)
             std::cout << elem_iter.first << ' ';
 
         std::cout << '\n';
 
-        std::cout << MAG "hash_table main:\n" CYN;
+        std::cout << "hash_table main:\n";
 
         for (auto &elem_iter : hash_table_main_)
             std::cout << elem_iter.first << ' ';
 
         std::cout << '\n';
 
-        std::cout << MAG "hash_table out:\n" CYN;
+        std::cout << "hash_table out:\n";
 
         for (auto &key_iter : hash_table_out_)
             std::cout << key_iter.first << ' ';

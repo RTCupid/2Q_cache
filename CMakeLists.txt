@@ -5,11 +5,34 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+
+function(add_debug_flags TGT)
+    set (DEBUG_FLAGS
+        -D _DEBUG
+        -O0
+        -Wall
+        -Wextra
+        -pedantic
+    )
+
+    target_compile_options(${TGT} PUBLIC
+		$<$<CONFIG:Debug>:
+			${DEBUG_FLAGS}
+        >
+        $<$<CONFIG:Release>:
+			${DEBUG_FLAGS}
+        >
+	)
+endfunction(add_debug_flags)
+
 add_executable(cache_2q src/main_2q.cpp)
 target_include_directories(cache_2q PRIVATE include)
 
 add_executable(cache_belady src/main_belady.cpp)
 target_include_directories(cache_belady PRIVATE include)
+
+add_debug_flags(cache_2q)
+add_debug_flags(cache_belady)
 
 include(FetchContent)
 
