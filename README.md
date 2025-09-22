@@ -117,7 +117,7 @@ class belady_cache
     using FuncToGetElem = std::function<ElemT(const KeyT &)>;
 
     size_t size_;
-    size_t      current_index_;
+    size_t current_index_;
     FuncToGetElem slow_get_elem_;
     std::unordered_map<KeyT, ElemT> cache_;
     std::unordered_map<KeyT, std::queue<size_t>> key_positions_;
@@ -153,12 +153,12 @@ bool lookup_update (const KeyT &key)
     if (cache_.size () == size_)
     {
         if (erase_elem_from_belady_cache (key))
-            cache_.try_emplace (key, slow_get_elem_ (key));
+            cache_.emplace (key, slow_get_elem_ (key));
 
         return false;
     }
 
-    cache_.try_emplace (key, slow_get_elem_ (key));
+    cache_.emplace (key, slow_get_elem_ (key));
 
     return false;
 }
