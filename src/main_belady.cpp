@@ -2,9 +2,10 @@
 #include <cassert>
 
 #include "cache_belady.hpp"
-#include "colors.h"
 
 int slow_func_to_get_int_element (int key) { return key; }
+
+using namespace caches;
 
 int main ()
 {

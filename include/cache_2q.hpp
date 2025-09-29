@@ -6,6 +6,8 @@
 #include <list>
 #include <unordered_map>
 
+namespace caches {
+
 template <typename KeyT, typename ElemT>
 class cache2q
 {
@@ -31,12 +33,12 @@ class cache2q
     std::unordered_map<KeyT, ElemIterT> hash_table_main_;
     std::unordered_map<KeyT, KeyIterT>  hash_table_out_;
 
-    FuncToGetElem slow_get_elem_;
-
     size_t size_;
     size_t size_list_in_;
     size_t size_list_main_;
     size_t size_list_out_;
+
+    FuncToGetElem slow_get_elem_;
 
 public:
     cache2q (size_t size, FuncToGetElem slow_get_elem) :
@@ -172,5 +174,6 @@ private:
         hash_table_out_.emplace (key, list_out_.begin ());
     }
 };
+} // namespace caches
 
 #endif

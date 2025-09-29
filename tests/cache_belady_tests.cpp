@@ -6,6 +6,8 @@
 
 int slow_get_elem (int key) { return key; }
 
+using namespace caches;
+
 struct test_t
 {
     size_t cache_size;

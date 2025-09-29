@@ -5,6 +5,8 @@
 
 int slow_func_to_get_int_element (int key) { return key; }
 
+using namespace caches;
+
 int main ()
 {
     size_t cache_size;

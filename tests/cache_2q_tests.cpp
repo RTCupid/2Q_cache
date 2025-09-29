@@ -10,6 +10,8 @@ static constexpr float factor_size_list_in   = 0.2f;
 static constexpr float factor_size_list_main = 0.2f;
 static constexpr float factor_size_list_out  = 0.6f;
 
+using namespace caches;
+
 TEST (cache2q, overflow_queue_in)
 {
     // arrange

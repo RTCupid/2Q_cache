@@ -6,6 +6,8 @@
 #include <functional>
 #include <queue>
 
+namespace caches {
+
 template <typename KeyT, typename ElemT>
 class belady_cache
 {
@@ -22,8 +24,8 @@ class belady_cache
 public:
     belady_cache (size_t size, FuncToGetElem slow_get_elem, KeyVectorT &input_elements) :
         size_ (size),
-        slow_get_elem_ (slow_get_elem),
-        current_index_ (0)
+        current_index_ (0),
+        slow_get_elem_ (slow_get_elem)
     {
         for (size_t i = 0; i < input_elements.size (); ++i)
             key_positions_[input_elements[i]].push (i);
@@ -98,5 +100,6 @@ private:
         return found_erase_elem;
     }
 };
+} // namespace caches
 
 #endif
