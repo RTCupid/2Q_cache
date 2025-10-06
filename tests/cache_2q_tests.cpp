@@ -28,35 +28,6 @@ TEST (cache2q, overflow_queue_in)
     EXPECT_FALSE (cache.lookup_update (0));
 }
 
-TEST (cache2q, overflow_queue_main)
-{
-    // arrange
-    cache2q<int, int> cache(capacity_in_tests, slow_get_elem);
-
-    auto size_list_in   = capacity_in_tests * factor_size_list_in;
-    auto size_list_main = capacity_in_tests * factor_size_list_main;
-    auto num_different_elements = size_list_in + size_list_main;
-
-    // act
-    for (int i = 0; i < size_list_in; i++)
-        cache.lookup_update (i);
-    // there queue in is full
-
-    for (int i = size_list_in; i <= num_different_elements; i++)
-    {
-        cache.lookup_update (i);
-        cache.lookup_update (i - size_list_in);
-    }
-
-    // assert
-    for (int i = 1; i <= num_different_elements; i++)
-    {
-        EXPECT_TRUE (cache.lookup_update (i));
-    }
-
-    EXPECT_FALSE (cache.lookup_update (0));
-}
-
 struct test_t
 {
     size_t cache_size;

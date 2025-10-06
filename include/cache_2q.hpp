@@ -6,6 +6,78 @@
 #include <list>
 #include <unordered_map>
 
+namespace detail {
+
+template <typename KeyT, typename ElemT>
+class queueLRU
+{
+    using ElemListT     = std::list<std::pair<KeyT, ElemT>>;
+    using ElemIterT     = ElemListT::iterator;
+    using MapElemIter   = std::unordered_map<KeyT, ElemIterT>;
+    using FuncToGetElem = std::function<ElemT(const KeyT &)>;
+
+    size_t size_;
+    ElemListT list_;
+    MapElemIter hash_table_;
+    FuncToGetElem slow_get_elem_;
+
+public:
+    queueLRU (size_t size, FuncToGetElem slow_get_elem) :
+        size_ (size), slow_get_elem_  (slow_get_elem) {}
+
+    bool lookup_update (const KeyT &key)
+    {
+        auto data_from_key_main = hash_table_.find (key);
+
+        if (data_from_key_main != hash_table_.end ())
+        {
+            list_.splice (list_.begin (), list_, data_from_key_main->second);
+            data_from_key_main->second = list_.begin ();
+
+            return true;
+        }
+
+        return false;
+    }
+
+    bool insert (const KeyT &key, const ElemT &new_elem_to_main)
+    {
+        auto data_from_key_main = hash_table_.find (key);
+
+        if (data_from_key_main != hash_table_.end ())
+            return false;
+
+        if (list_.size () == size_)
+        {
+            hash_table_.erase (list_.back ().first);
+            list_.pop_back ();
+        }
+
+        list_.emplace_front (key, new_elem_to_main);
+        hash_table_.emplace (key, list_.begin ());
+
+        return true;
+    }
+
+    void dump_list ()
+    {
+        for (auto &elem : list_)
+            std::cout << elem.second << ' ';
+
+        std::cout << '\n';
+    }
+
+    void dump_hashtable ()
+    {
+        for (auto &elem_iter : hash_table_)
+            std::cout << elem_iter.first << ' ';
+
+        std::cout << '\n';
+    }
+};
+
+} // namespace detail
+
 namespace caches {
 
 template <typename KeyT, typename ElemT>
@@ -25,14 +97,6 @@ class cache2q
 
     using FuncToGetElem = std::function<ElemT(const KeyT &)>;
 
-    ElemListT list_in_;
-    ElemListT list_main_;
-    KeyListT  list_out_;
-
-    std::unordered_map<KeyT, ElemIterT> hash_table_in_;
-    std::unordered_map<KeyT, ElemIterT> hash_table_main_;
-    std::unordered_map<KeyT, KeyIterT>  hash_table_out_;
-
     size_t size_;
     size_t size_list_in_;
     size_t size_list_main_;
@@ -40,28 +104,29 @@ class cache2q
 
     FuncToGetElem slow_get_elem_;
 
+    ElemListT list_in_;
+    KeyListT  list_out_;
+
+    std::unordered_map<KeyT, ElemIterT> hash_table_in_;
+    std::unordered_map<KeyT, KeyIterT>  hash_table_out_;
+
+     detail::queueLRU<KeyT, ElemT> queue_main_;
 public:
     cache2q (size_t size, FuncToGetElem slow_get_elem) :
         size_           (std::max (size, minimal_capacity_)),
         size_list_in_   (size_ * factor_size_list_in_),
         size_list_main_ (size_ * factor_size_list_main_),
         size_list_out_  (size_ * factor_size_list_out_),
-        slow_get_elem_  (slow_get_elem) {}
+        slow_get_elem_  (slow_get_elem),
+        queue_main_     (size_list_main_, slow_get_elem) {}
 
     bool lookup_update (const KeyT &key)
     {
         if (hash_table_in_.contains (key) )
             return true;
 
-        auto data_from_key_main = hash_table_main_.find (key);
-
-        if (data_from_key_main != hash_table_main_.end ())
-        {
-            list_main_.splice (list_main_.begin (), list_main_, data_from_key_main->second);
-            data_from_key_main->second = list_main_.begin ();
-
+        if (queue_main_.lookup_update(key))
             return true;
-        }
 
         auto new_elem = slow_get_elem_ (key);
 
@@ -73,7 +138,7 @@ public:
         }
         else
         {
-            insert_to_main (key, new_elem);
+            queue_main_.insert (key, new_elem);
 
             list_out_.erase (data_from_key_out->second);
             hash_table_out_.erase (data_from_key_out);
@@ -95,10 +160,7 @@ public:
 
         std::cout << "list main:\n";
 
-        for (auto &elem : list_main_)
-            std::cout << elem.second << ' ';
-
-        std::cout << '\n';
+        queue_main_.dump_list ();
 
         std::cout << "list out:\n";
 
@@ -121,10 +183,7 @@ public:
 
         std::cout << "hash_table main:\n";
 
-        for (auto &elem_iter : hash_table_main_)
-            std::cout << elem_iter.first << ' ';
-
-        std::cout << '\n';
+        queue_main_.dump_hashtable ();
 
         std::cout << "hash_table out:\n";
 
@@ -148,18 +207,6 @@ private:
 
         list_in_.emplace_front (key, new_elem_to_in);
         hash_table_in_.emplace (key, list_in_.begin ());
-    }
-
-    void insert_to_main (const KeyT &key, const ElemT &new_elem_to_main)
-    {
-        if (list_main_.size () == size_list_main_)
-        {
-            hash_table_main_.erase (list_main_.back ().first);
-            list_main_.pop_back ();
-        }
-
-        list_main_.emplace_front (key, new_elem_to_main);
-        hash_table_main_.emplace (key, list_main_.begin ());
     }
 
     void insert_to_out (const KeyT &key)
