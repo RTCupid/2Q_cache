@@ -6,7 +6,8 @@
 #include <list>
 #include <unordered_map>
 
-namespace detail {
+namespace detail
+{
 
 template <typename KeyT, typename ElemT>
 class queueLRU
@@ -78,7 +79,8 @@ public:
 
 } // namespace detail
 
-namespace caches {
+namespace caches
+{
 
 template <typename KeyT, typename ElemT>
 class cache2q
@@ -110,7 +112,8 @@ class cache2q
     std::unordered_map<KeyT, ElemIterT> hash_table_in_;
     std::unordered_map<KeyT, KeyIterT>  hash_table_out_;
 
-     detail::queueLRU<KeyT, ElemT> queue_main_;
+    detail::queueLRU<KeyT, ElemT> queue_main_;
+
 public:
     cache2q (size_t size, FuncToGetElem slow_get_elem) :
         size_           (std::max (size, minimal_capacity_)),
