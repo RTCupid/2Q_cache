@@ -60,7 +60,7 @@ public:
         return true;
     }
 
-    void dump_list ()
+    void dump_list () const
     {
         for (auto &elem : list_)
             std::cout << elem.second << ' ';
@@ -68,7 +68,7 @@ public:
         std::cout << '\n';
     }
 
-    void dump_hashtable ()
+    void dump_hashtable () const
     {
         for (auto &elem_iter : hash_table_)
             std::cout << elem_iter.first << ' ';
